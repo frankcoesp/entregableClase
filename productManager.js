@@ -1,7 +1,11 @@
+const fs = require('fs')
+
 class ProductManager{
-    constructor(){
+    constructor(path){
         this.products = []
         this.productsId = 1
+        this.path = path
+        this.loadArray()
     }
 
     addProducts(
@@ -27,37 +31,90 @@ class ProductManager{
             code,
             stock
         }
+
         this.products.push(newProduct)
+        this.save()
         return `producto cargado existosamente`
+
     }
 
+
+    //!NUEVO 
+    save() {
+        try {
+            const data = JSON.stringify(this.products, null, 2);
+            fs.writeFileSync(this.path, data, 'utf-8');
+        } catch (err) {
+            console.error(`Error al guardar el archivo: ${err.message}`);
+        }
+    }
+    
+
+    loadArray(){
+        try{
+            const readContent = fs.readFileSync(this.path,'utf-8')
+            this.products = JSON.parse(readContent)
+        }catch(err){
+            console.log('error al cargar el producto:',err.message)
+        }
+    }
+
+    
     getProducts(){
-        return this.products
+        return [...this.products]
     }
 
-    getProductsById(idProduct){
-        const product = this.products.find(product=> product.id === idProduct)
-        if(!product) return 'Not found'
-        return product
+    getProductById(idProduct) {
+        const product = this.products.find(product => product.id === idProduct);
+        return product ? { ...product } : null;
+    }
+    
+    updateProduct(idProduct, fieldToUpdate, newValue) {
+        const productIndex = this.products.findIndex(product => product.id === idProduct);
+
+        if (productIndex !== -1) {
+            const updatedProduct = { ...this.products[productIndex] };
+
+            updatedProduct[fieldToUpdate] = newValue;
+
+            this.products[productIndex] = updatedProduct;
+
+            this.save();
+
+            return 'Producto actualizado exitosamente';
+        } else {
+            return 'No se encontró un producto con el ID especificado';
+        }
+    }
+
+    deleteProduct(idProduct) {
+        const productIndex = this.products.findIndex(product => product.id === idProduct);
+
+        if (productIndex !== -1) {
+            this.products.splice(productIndex, 1);
+            this.save();
+
+            return 'Producto eliminado exitosamente';
+        } else {
+            return 'No se encontró un producto con el ID especificado';
+        }
     }
 }
 
-const newProduct = new ProductManager()
-console.log(newProduct.getProducts())
+
+const productManager = new ProductManager('objetos.json');
+
+console.log(productManager.getProducts())
+
+console.log(productManager.addProducts('Producto prueba', 'Este es un producto prueba', 200, 'sin imagen', 'abc123', 25));
+console.log(productManager.addProducts('Producto prueba2', 'Este es un producto prueba2', 400, 'sin imagen2', 'ihy164', 25));
+console.log(productManager.addProducts('Producto prueba3', 'Este es un producto prueba3', 600, 'sin imagen3', 'uiu134', 25));
+console.log(productManager.getProducts())
+
+console.log(productManager.getProductById(1))
+console.log(productManager.updateProduct(2, 'price', 150))
+console.log(productManager.deleteProduct(1))
 
 
-console.log(newProduct.addProducts('producto prueba1', 'esto es un producto prueba', 200, 'sin imagen', 'abc123', 25));
 
-console.log(newProduct.addProducts('producto prueba2', 'esto es un producto prueba', 200, 'sin imagen', 'abc123', 25));
-
-console.log(newProduct.addProducts('producto prueba3', 'esto es un producto prueba', 200, 'sin imagen', 'abc123wew', 25));
-
-console.log(newProduct.addProducts('producto incompleto', 'esto es un producto prueba para la funcion donde faltan agregar campos', 200, 'sin imagen',25));
-
-console.log(newProduct.getProducts())
-
-const productoId1 = newProduct.getProductsById(2);
-const productoId2 = newProduct.getProductsById(3);
-console.log('--------busqueda de productos por ID--------')
-console.log(productoId1)
-console.log(productoId2)
+console.log(productManager.getProducts())
