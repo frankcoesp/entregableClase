@@ -106,12 +106,19 @@ console.log(productManager.getProducts())
 console.log(productManager.addProducts('Producto prueba', 'Este es un producto prueba', 200, 'sin imagen', 'abc123', 25));
 console.log(productManager.addProducts('Producto prueba2', 'Este es un producto prueba2', 400, 'sin imagen2', 'ihy164', 25));
 console.log(productManager.addProducts('Producto prueba3', 'Este es un producto prueba3', 600, 'sin imagen3', 'uiu134', 25));
+console.log(productManager.addProducts('Producto 4', 'Descripción del Producto 4', 300, 'imagen4.jpg', 'xyz456', 20));
+console.log(productManager.addProducts('Producto 5', 'Descripción del Producto 5', 500, 'imagen5.jpg', 'lmn789', 15));
+console.log(productManager.addProducts('Producto 6', 'Descripción del Producto 6', 700, 'imagen6.jpg', 'opq012', 30));
+console.log(productManager.addProducts('Producto 7', 'Descripción del Producto 7', 800, 'imagen7.jpg', 'rst345', 10));
+console.log(productManager.addProducts('Producto 8', 'Descripción del Producto 8', 250, 'imagen8.jpg', 'uvw678', 18));
+console.log(productManager.addProducts('Producto 9', 'Descripción del Producto 9', 450, 'imagen9.jpg', 'xyz901', 22));
+console.log(productManager.addProducts('Producto 10', 'Descripción del Producto 10', 550, 'imagen10.jpg', 'abc234', 27));
 console.log(productManager.getProducts())
 
 console.log(productManager.getProductById(1))
 console.log(productManager.updateProduct(2, 'price', 150))
-console.log(productManager.deleteProduct(1))
 
 
 
-console.log(productManager.getProducts())
+
+console.log(productManager.getProducts()) 
